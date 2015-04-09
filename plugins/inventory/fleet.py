@@ -48,15 +48,15 @@ parser.add_option('--host', default=None, dest="host",
 # helper functions
 #
 
-def get_ssh_config():
+def get_ssh_config() :
     configs = []
-    for box in list_running_boxes():
+    for box in list_running_boxes() :
         config = get_a_ssh_config(box)
         configs.append(config)
     return configs
 
 #list all the running instances in the fleet
-def list_running_boxes():
+def list_running_boxes() :
     boxes = []
     for line in subprocess.check_output(["fleetctl", "list-machines"]).split('\n'):
         matcher = re.search("[^\s]+[\s]+([^\s]+).+", line)
@@ -72,7 +72,7 @@ def get_a_ssh_config(box_name):
     config['ansible_python_interpreter'] = '/opt/bin/python'
     return config
 
-# List out servers that vagrant has running
+# List out servers that fleet has running
 #------------------------------
 if options.list:
     ssh_config = get_ssh_config()
@@ -82,7 +82,7 @@ if options.list:
         hosts['coreos'].append(data['Host'])
 
     print json.dumps(hosts)
-    sys.exit(1)
+    sys.exit(0)
 
 # Get out the host details
 #------------------------------
@@ -97,11 +97,11 @@ elif options.host:
         result
 
     print json.dumps(result)
-    sys.exit(1)
+    sys.exit(0)
 
 
 # Print out help
 #------------------------------
 else:
     parser.print_help()
-    sys.exit(1)
+    sys.exit(0)
